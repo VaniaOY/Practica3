@@ -22,14 +22,14 @@ import android.widget.TimePicker;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class
-MainActivity extends Activity implements OnSeekBarChangeListener,
+public class MainActivity extends Activity implements OnSeekBarChangeListener,
 		OnClickListener, OnDateSetListener, OnTimeSetListener {
 
 	EditText nombre;
 	TextView cuantasPersonas;
 	Button fecha, hora;
 	SeekBar barraPersonas;
+	TextView muestraDatos;
 
 	SimpleDateFormat horaFormato, fechaFormato;
 
@@ -38,104 +38,74 @@ MainActivity extends Activity implements OnSeekBarChangeListener,
 	String fechaSel = "", horaSel = "";
 	Date fechaConv;
 	String cuantasPersonasFormat = "";
+	String Telefono, Edad, Email, Disfrutar,Servicio;
 	int personas = 1; // Valor por omision, al menos 1 persona tiene que reservar
 
 	Calendar calendario;
 
-    String nombren = "", fechan = "", horan = "";
-    int personasn = 0;
-    boolean nuevo= false;
-    boolean inicio= true;
-    TextView muestraDatosn;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		System.out.println(inicio);
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);
 
-        if (inicio == false) {
-            muestraDatosn = (TextView) findViewById(R.id.mostrarDatosNvos);
+		if(getIntent().getExtras()!=null){
+			muestraDatos = (TextView) findViewById(R.id.mostrar);
+			Bundle recibe = new Bundle();
+			recibe = this.getIntent().getExtras();
 
-            Bundle recibe = new Bundle();
-            recibe = this.getIntent().getExtras();
-
-            nombren = recibe.getString("nombre");
-            personasn = recibe.getInt("personas");
-            fechan = recibe.getString("fecha");
-            horan = recibe.getString("hora");
-            nuevo = recibe.getBoolean("Otra");
-            System.out.println("recibe");
-            onResume();
-        }
-            cuantasPersonas = (TextView) findViewById(R.id.cuantasPersonas);
-            barraPersonas = (SeekBar) findViewById(R.id.personas);
-
-            fecha = (Button) findViewById(R.id.fecha);
-            hora = (Button) findViewById(R.id.hora);
-
-            barraPersonas.setOnSeekBarChangeListener(this);
-
-            nombre = (EditText) findViewById(R.id.nombre);
-            muestraDatosn.setText("Ultima reservacion a nombre de:\n" + nombre + "\n" + personas
-                + " personas\nFecha: " + fecha + "\nHora: " + hora + "\n");
+			Telefono = recibe.getString("Telefono");
+			Edad= recibe.getString("Edad");
+			Email = recibe.getString("Email");
+			Disfrutar = recibe.getString("Disfrutar");
+			Servicio= recibe.getString("Servicios");
 
 
+			muestraDatos.setText("Reservacion :\n" + Telefono + "\n" + Edad+ "\n"
+					 + Email+ "\n" + Disfrutar+ "\n" + Servicio + "\n");
 
-        System.out.println("ver");
-			cuantasPersonasFormat = cuantasPersonas.getText().toString();
-            // cuantasPersonasFormat = "personas: %d";
-            cuantasPersonas.setText("Personas: 1"); // condicion inicial
+		}
 
-            // Para seleccionar la fecha y la hora
-            Calendar fechaSeleccionada = Calendar.getInstance();
-            fechaSeleccionada.set(Calendar.HOUR_OF_DAY, 12); // hora inicial
-            fechaSeleccionada.clear(Calendar.MINUTE); // 0
-            fechaSeleccionada.clear(Calendar.SECOND); // 0
+		cuantasPersonas = (TextView) findViewById(R.id.cuantasPersonas);
+		barraPersonas = (SeekBar) findViewById(R.id.personas);
 
-            // formatos de la fecha y hora
-            fechaFormato = new SimpleDateFormat(fecha.getText().toString());
-            horaFormato = new SimpleDateFormat("HH:mm");
-            // horaFormato = new SimpleDateFormat(hora.getText().toString());
+		fecha = (Button) findViewById(R.id.fecha);
+		hora = (Button) findViewById(R.id.hora);
 
-            // La primera vez mostramos la fecha actual
-            Date fechaReservacion = fechaSeleccionada.getTime();
-            fechaSel = fechaFormato.format(fechaReservacion);
-            fecha.setText(fechaSel); // fecha en el
+		barraPersonas.setOnSeekBarChangeListener(this);
 
-            horaSel = horaFormato.format(fechaReservacion);
-            // boton
-            hora.setText(horaSel); // hora en el boton
+		nombre = (EditText) findViewById(R.id.nombre);
 
-            // Otra forma de ocupar los botones
-            fecha.setOnClickListener(this);
-            hora.setOnClickListener(this);
+		cuantasPersonasFormat = cuantasPersonas.getText().toString();
+		// cuantasPersonasFormat = "personas: %d";
+		cuantasPersonas.setText("Personas: 1"); // condicion inicial
 
+		// Para seleccionar la fecha y la hora
+		Calendar fechaSeleccionada = Calendar.getInstance();
+		fechaSeleccionada.set(Calendar.HOUR_OF_DAY, 12); // hora inicial
+		fechaSeleccionada.clear(Calendar.MINUTE); // 0
+		fechaSeleccionada.clear(Calendar.SECOND); // 0
 
-    }
+		// formatos de la fecha y hora
+		fechaFormato = new SimpleDateFormat(fecha.getText().toString());
+		horaFormato = new SimpleDateFormat("HH:mm");
+		// horaFormato = new SimpleDateFormat(hora.getText().toString());
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-    }
+		// La primera vez mostramos la fecha actual
+		Date fechaReservacion = fechaSeleccionada.getTime();
+		fechaSel = fechaFormato.format(fechaReservacion);
+		fecha.setText(fechaSel); // fecha en el
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        inicio = false;
-        System.out.println("true");
+		horaSel = horaFormato.format(fechaReservacion);
+		// boton
+		hora.setText(horaSel); // hora en el boton
 
-    }
+		// Otra forma de ocupar los botones
+		fecha.setOnClickListener(this);
+		hora.setOnClickListener(this);
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        inicio=false;
-        System.out.println("cambio");
-    }
+	}
 
-    @Override
+	@Override
 	public void onProgressChanged(SeekBar barra, int progreso,
 			boolean delUsuario) {
 
@@ -212,8 +182,7 @@ MainActivity extends Activity implements OnSeekBarChangeListener,
 		datos.putString("fecha", fechaSel);
 		datos.putString("hora", horaSel);
 		envia.putExtras(datos);
-        onPause();
-
+		onPause();
 		startActivity(envia);
 	}
 }
