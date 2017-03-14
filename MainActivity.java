@@ -117,7 +117,7 @@ MainActivity extends Activity implements OnSeekBarChangeListener,
     @Override
     protected void onResume() {
         super.onResume();
-        inicio = false;
+        
     }
 
     @Override
